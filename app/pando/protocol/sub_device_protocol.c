@@ -22,8 +22,8 @@ struct property_indicator
 
 static struct property_indicator s_current_property;
 static struct params_block_indicator s_current_param;
-struct sub_device_base_params base_params;	//瀛愯澶囩殑鍩烘湰鍙傛暟
-static uint16_t current_tlv_block_size = 0;	//褰撳墠淇℃伅鍖虹殑澶у皬锛屽寘鍚玞ount鐨勫ぇ灏�
+struct sub_device_base_params base_params;	//鐎涙劘顔曟径鍥╂畱閸╃儤婀伴崣鍌涙殶
+static uint16_t current_tlv_block_size = 0;	//瑜版挸澧犳穱鈩冧紖閸栬櫣娈戞径褍鐨敍灞藉瘶閸氱帪ount閻ㄥ嫬銇囩亸锟�
 static uint16_t tlv_block_buffer_size;
 
 static uint16_t get_tlv_count(struct TLVs *params_block);
@@ -154,7 +154,7 @@ struct TLVs * FUNCTION_ATTRIBUTE create_params_block()
 	struct TLVs *tlv_block = NULL;
     uint8_t need_length;
 
-	current_tlv_block_size = 0;		//纭繚姣忔鏂板缓tlv淇℃伅鍖烘椂锛屼俊鎭尯澶у皬鐨勮鏁伴兘鏄纭殑
+	current_tlv_block_size = 0;		//绾喕绻氬В蹇旑偧閺傛澘缂搕lv娣団剝浼呴崠鐑樻閿涘奔淇婇幁顖氬隘婢堆冪毈閻ㄥ嫯顓搁弫浼村厴閺勵垱顒滅涵顔炬畱
 
     tlv_block_buffer_size = DEFAULT_TLV_BLOCK_SIZE;
 	tlv_block = (struct TLVs *)pd_malloc(tlv_block_buffer_size);
@@ -163,8 +163,8 @@ struct TLVs * FUNCTION_ATTRIBUTE create_params_block()
 	{
 		return NULL;
 	}
-	tlv_block->count = 0;	//鍒濆鍖栦釜鏁颁负0
-	current_tlv_block_size = sizeof(struct TLVs);		//娌℃湁娣诲姞param鏃讹紝block鐨勫唴瀛樺崰鐢ㄥぇ灏忎粎浠呮槸涓暟
+	tlv_block->count = 0;	//閸掓繂顫愰崠鏍﹂嚋閺侀璐�0
+	current_tlv_block_size = sizeof(struct TLVs);		//濞屸剝婀佸ǎ璇插param閺冭绱漛lock閻ㄥ嫬鍞寸�涙ê宕伴悽銊ャ亣鐏忓繋绮庢禒鍛Ц娑擃亝鏆�
 
 	return tlv_block;
 }
@@ -178,7 +178,7 @@ int FUNCTION_ATTRIBUTE add_next_param(struct TLVs *params_block, uint16_t next_t
 	uint8_t tmp_value[8];
     uint8_t *tlv_position;
 	struct TLVs *new_property_block = NULL;
-	uint16_t current_count = net16_to_host(params_block->count);	//鐢变簬create鐨勬椂鍊欏氨瀵硅鍊艰繘琛屼簡绔浆鎹紝鍥犳闇�瑕佸洖杞�
+	uint16_t current_count = net16_to_host(params_block->count);	//閻㈠彉绨琧reate閻ㄥ嫭妞傞崐娆忔皑鐎电顕氶崐鑹扮箻鐞涘奔绨＄粩顖濇祮閹诡澁绱濋崶鐘愁劃闂囷拷鐟曚礁娲栨潪锟�
 
     need_length = is_tlv_need_length(next_type);
     if (1 == need_length)
@@ -198,7 +198,7 @@ int FUNCTION_ATTRIBUTE add_next_param(struct TLVs *params_block, uint16_t next_t
         return -1;
     }
     
-	//淇℃伅鍖烘墿瀹�
+	//娣団剝浼呴崠鐑樺⒖鐎癸拷
 	if (current_tlv_block_size + next_length + sizeof(struct TLV) 
         - (!need_length) * sizeof(next_length) > tlv_block_buffer_size)
 	{
@@ -212,10 +212,10 @@ int FUNCTION_ATTRIBUTE add_next_param(struct TLVs *params_block, uint16_t next_t
 	current_count++;
 	tlv_position = (uint8_t *)params_block + current_tlv_block_size;
 
-	//灏哻ount淇濆瓨涓虹綉缁滃瓧鑺傚簭锛屼究浜庡垱寤轰簨浠舵垨鏁版嵁鍖呮椂鐩存帴璧嬪��
+	//鐏忓摶ount娣囨繂鐡ㄦ稉铏圭秹缂佹粌鐡ч懞鍌氱碍閿涘奔绌舵禍搴″灡瀵よ桨绨ㄦ禒鑸靛灗閺佺増宓侀崠鍛閻╁瓨甯寸挧瀣拷锟�
 	params_block->count = host16_to_net(current_count);
 	
-	//澶嶅埗tlv鍐呭锛屽苟澶у皬绔浆鎹�,淇tlv闀垮害鍜宼ype鐨勮缃柟寮忥紝瑙ｅ喅璺ㄥ瓧閿欒
+	//婢跺秴鍩梩lv閸愬懎顔愰敍灞借嫙婢堆冪毈缁旑垵娴嗛幑锟�,娣囶喗顒渢lv闂�鍨閸滃ype閻ㄥ嫯顔曠純顔芥煙瀵骏绱濈憴锝呭枀鐠恒劌鐡ч柨娆掝嚖
 	type = host16_to_net(next_type);
 	pd_memcpy(tlv_position, &type, sizeof(type));
     tlv_position += sizeof(type);
@@ -323,7 +323,7 @@ struct TLVs * FUNCTION_ATTRIBUTE get_sub_device_command(
 {
 	struct pando_command *tmp_body = (struct pando_command *)(device_buffer->buffer + DEV_HEADER_LEN);
 
-	//闇�瑕佸鍖呭ご杩涜鏍￠獙锛屽皻鏈紪鍐�
+	//闂囷拷鐟曚礁顕崠鍛仈鏉╂稖顢戦弽锟犵崣閿涘苯鐨婚張顏嗙椽閸愶拷
 	struct device_header *head = (struct device_header *)device_buffer->buffer;
 	base_params.command_sequence = net32_to_host(head->frame_seq);
     command_body->sub_device_id = net16_to_host(tmp_body->sub_device_id);
@@ -413,18 +413,18 @@ struct TLV * FUNCTION_ATTRIBUTE get_tlv_value(struct TLV *params_in, void *value
         switch (*type)
         {
             case TLV_TYPE_FLOAT64:
-                net64f_to_host(*(double *)value);
+            	*(double *)value = net64f_to_host(*(double *)value);
                 break;
             case TLV_TYPE_UINT64:
             case TLV_TYPE_INT64:
-                net64_to_host(*(uint64_t *)value);
+            	*(uint64_t *)value = net64_to_host(*(uint64_t *)value);
                 break;
             case TLV_TYPE_FLOAT32:
-                net32f_to_host(*(float *)value);
+            	*(float *)value = net32f_to_host(*(float *)value);
                 break;
             case TLV_TYPE_UINT32:
             case TLV_TYPE_INT32:
-                net32_to_host(*(uint32_t *)value);
+            	*(uint32_t *)value = net32_to_host(*(uint32_t *)value);
                 break;
             case TLV_TYPE_INT8:
             case TLV_TYPE_UINT8:
@@ -432,7 +432,7 @@ struct TLV * FUNCTION_ATTRIBUTE get_tlv_value(struct TLV *params_in, void *value
                 break;
             case TLV_TYPE_INT16:
             case TLV_TYPE_UINT16:
-                net16_to_host(*(uint16_t *)value);
+            	*(uint16_t *)value = net16_to_host(*(uint16_t *)value);
                 break;
             default:
                 break;
@@ -469,18 +469,18 @@ struct TLV * FUNCTION_ATTRIBUTE get_tlv_param(struct TLV *params_in, uint16_t *t
         switch (*type)
         {
             case TLV_TYPE_FLOAT64:
-                net64f_to_host(*(double *)value);
+            	*(double *)value = net64f_to_host(*(double *)value);
                 break;
             case TLV_TYPE_UINT64:
             case TLV_TYPE_INT64:
-                net64_to_host(*(uint64_t *)value);
+            	*(uint64_t *)value = net64_to_host(*(uint64_t *)value);
                 break;
             case TLV_TYPE_FLOAT32:
-                net32f_to_host(*(float *)value);
+            	*(float *)value = net32f_to_host(*(float *)value);
                 break;
             case TLV_TYPE_UINT32:
             case TLV_TYPE_INT32:
-                net32_to_host(*(uint32_t *)value);
+            	*(uint32_t *)value = net32_to_host(*(uint32_t *)value);
                 break;
             case TLV_TYPE_INT8:
             case TLV_TYPE_UINT8:
@@ -488,7 +488,7 @@ struct TLV * FUNCTION_ATTRIBUTE get_tlv_param(struct TLV *params_in, uint16_t *t
                 break;
             case TLV_TYPE_INT16:
             case TLV_TYPE_UINT16:
-                net16_to_host(*(uint16_t *)value);
+            	*(uint16_t *)value = net16_to_host(*(uint16_t *)value);
                 break;
             default:
                 break;
